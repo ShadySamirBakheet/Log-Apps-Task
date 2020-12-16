@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#151F2A">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#151f29">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="220dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:id="@+id/layImage"
+            android:background="#fff"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="16dp">
+            <ImageView
+                android:id="@+id/image_course"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/image2"/>
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="15dp"
+                android:layout_marginTop="15dp"
+                android:background="#fff"
+                android:src="@drawable/newlogo"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/course_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:textSize="18dp"
+            android:textColor="#fff"
+            android:layout_below="@+id/layImage"/>
+
+        <TextView
+            android:id="@+id/course_subtitle"
+            android:layout_below="@+id/course_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:layout_marginStart="16dp"
+            android:textSize="13dp"
+            android:textColor="#fff"/>
+
+        <LinearLayout
+            android:id="@+id/laystar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/course_subtitle"
+            android:layout_marginStart="14dp">
+
+            <ImageView
+                android:id="@+id/star1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_isstart"/>
+            <ImageView
+                android:id="@+id/star2"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_isstart"/>
+            <ImageView
+                android:id="@+id/star3"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_isstart"/>
+            <ImageView
+                android:id="@+id/star4"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_isstart"/>
+            <ImageView
+                android:id="@+id/star5"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_isstart"/>
+
+            <TextView
+                android:id="@+id/numView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp"
+                android:textColor="#AFAFAF"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/laysalary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/laystar"
+            android:layout_marginStart="14dp">
+            <TextView
+                android:id="@+id/newsalary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EGP 3.499"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:layout_marginStart="8dp"/>
+
+            <TextView
+                android:id="@+id/oldsalary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EGP 4.499"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:background="@drawable/ic_line2"
+                android:layout_marginStart="8dp"
+                android:textColor="#AFAFAF"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

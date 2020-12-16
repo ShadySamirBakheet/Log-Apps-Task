@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_courses">
+
+    <fragment
+        android:id="@+id/navigation_courses"
+        android:name="shady.samir.logappstask.DesingTask.ui.Courses.CourseFragment"
+        tools:layout="@layout/fragment_courses" />
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="shady.samir.logappstask.DesingTask.ui.Search.SearchFragment"
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="shady.samir.logappstask.DesingTask.ui.Home.HomeFragment"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_chat"
+        android:name="shady.samir.logappstask.DesingTask.ui.Chat.ChatFragment"
+        tools:layout="@layout/chat_fragment" />
+
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="shady.samir.logappstask.DesingTask.ui.Account.AccountFragment"
+        tools:layout="@layout/account_fragment" />
+
+
+</navigation>

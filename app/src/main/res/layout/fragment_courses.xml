@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#151F2A"
+    android:layout_height="match_parent"
+    tools:context=".DesingTask.ui.Courses.CourseFragment">
+
+   <RelativeLayout
+       android:id="@+id/sliderLay"
+       android:layout_width="match_parent"
+       android:background="#fff"
+       android:layout_height="wrap_content">
+
+       <com.smarteist.autoimageslider.SliderView
+           android:id="@+id/imageSlider"
+           android:layout_width="match_parent"
+           android:layout_height="200dp"
+           android:paddingBottom="16dp"
+           app:sliderAnimationDuration="600"
+           app:sliderAutoCycleDirection="back_and_forth"
+           app:sliderAutoCycleEnabled="true"
+           app:sliderIndicatorAnimationDuration="600"
+           app:sliderIndicatorGravity="center_horizontal|bottom"
+           app:sliderIndicatorMargin="15dp"
+           app:sliderIndicatorOrientation="horizontal"
+           app:sliderIndicatorPadding="3dp"
+           app:sliderIndicatorRadius="2dp"
+           app:sliderIndicatorSelectedColor="#5A5A5A"
+           app:sliderIndicatorUnselectedColor="#FFF"
+           app:sliderScrollTimeInSec="1"
+           app:sliderStartAutoCycle="true" />
+
+       <ImageView
+           android:id="@+id/pervbtn"
+           android:layout_width="24dp"
+           android:layout_height="200dp"
+           android:src="@drawable/ic_perv"/>
+
+       <ImageView
+           android:id="@+id/nextbtn"
+           android:layout_width="24dp"
+           android:layout_height="200dp"
+           android:src="@drawable/ic_next"
+           android:layout_alignParentEnd="true"/>
+
+     <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:layout_below="@+id/imageSlider"
+         android:background="#151F2A">
+
+         <TextView
+             android:id="@+id/course_title"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Newest Courses in Android"
+             android:layout_marginStart="20dp"
+             android:layout_marginTop="20dp"
+             android:textSize="20dp"
+             android:textStyle="bold"
+             android:textColor="#F8AA38"/>
+
+         <androidx.recyclerview.widget.RecyclerView
+             android:id="@+id/newest"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_below="@+id/course_title"
+             android:orientation="horizontal"/>
+
+         <TextView
+             android:id="@+id/course_top_title"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Top courses in kotlin"
+             android:layout_marginStart="20dp"
+             android:layout_marginTop="20dp"
+             android:textSize="20dp"
+             android:textStyle="bold"
+             android:layout_below="@+id/newest"
+             android:textColor="#F8AA38"/>
+
+         <androidx.recyclerview.widget.RecyclerView
+             android:id="@+id/top"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_below="@+id/course_top_title"
+             android:orientation="horizontal"/>
+
+     </RelativeLayout>
+
+   </RelativeLayout>
+
+
+</ScrollView>
