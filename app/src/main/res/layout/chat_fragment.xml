@@ -9,14 +9,23 @@
         android:id="@+id/chatLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/userNum"
+            android:text="1 User opened Now"
+            android:textSize="18dp"
+            android:gravity="center"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/messageitem"
             android:layout_margin="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/sendlayout" />
+            android:layout_above="@+id/sendlayout"
+            android:layout_below="@+id/userNum"/>
 
         <RelativeLayout
             android:id="@+id/sendlayout"
