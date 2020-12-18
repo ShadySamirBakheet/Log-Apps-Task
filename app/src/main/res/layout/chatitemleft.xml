@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="300dp"
-    android:padding="10dp"
     android:layout_height="wrap_content">
 
     <TextView
@@ -11,7 +10,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hollo"
-        android:layout_toRightOf="@+id/userprofile"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_below="@+id/username"

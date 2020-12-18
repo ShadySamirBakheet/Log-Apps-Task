@@ -39,8 +39,8 @@ class MessageAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val message: MessageTexts = list.get(position)
-        holder.showmessage.setText(message.message)
-        holder.username.setText(message.username)
+        holder.showmessage.setText(message.messageContent)
+        holder.username.setText(message.userName)
     }
 
     override fun getItemCount(): Int {
@@ -49,7 +49,7 @@ class MessageAdapter(
 
 
     override fun getItemViewType(position: Int): Int {
-        return if (list.get(position).username.equals(mUserName)) {
+        return if (list.get(position).userName.equals(mUserName)) {
             MES_TYPE_RIGHT
         } else {
             MES_TYPE_LEFT

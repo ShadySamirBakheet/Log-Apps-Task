@@ -1,3 +1,3 @@
 package shady.samir.logappstask.DesingTask.ui.Chat
 
-class MessageTexts(var username: String,var message: String)
+data class MessageTexts(val userName : String, val messageContent : String, val roomName: String,var viewType : Int)

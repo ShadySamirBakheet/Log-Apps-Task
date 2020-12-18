@@ -17,6 +17,7 @@ import com.github.nkzawa.emitter.Emitter
 import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.Gson
 import org.json.JSONException
 import org.json.JSONObject
 import shady.samir.logappstask.R
@@ -44,6 +45,10 @@ class ChatFragment : Fragment() {
     private val mTypingHandler = Handler()
 
     private var isConnected = true
+
+    val gson: Gson = Gson()
+
+    var roomName = "LogAppsTesk"
 
 
     companion object {
@@ -90,20 +95,15 @@ class ChatFragment : Fragment() {
 
         try {
             this.socket = IO.socket("http://chat.socket.io")
+            Toast.makeText(context,"success"+socket.id(),Toast.LENGTH_LONG).show()
         } catch (e: URISyntaxException) {
             Toast.makeText(context, "Socket", Toast.LENGTH_LONG).show()
         }
 
         socket.on("new message", onNewMessage);
-        socket.on("login", onLogin)
         socket!!.on(Socket.EVENT_CONNECT, onConnect)
-        socket!!.on(Socket.EVENT_DISCONNECT, onDisconnect)
-        socket!!.on(Socket.EVENT_CONNECT_ERROR, onConnectError)
-        socket!!.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
         socket!!.on("user joined", onUserJoined)
         socket!!.on("user left", onUserLeft)
-        socket!!.on("typing", onTyping)
-        socket!!.on("stop typing", onStopTyping)
         socket.connect();
 
         btn_sendmassage.setOnClickListener {
@@ -114,19 +114,15 @@ class ChatFragment : Fragment() {
     }
 
     private fun sendMessge(messageText: String) {
-        if (TextUtils.isEmpty(messageText)) {
-            Toast.makeText(context, "Enter Your Message", Toast.LENGTH_LONG).show()
-            return
-        }
+        val content = messageText
+        val sendData = SendMessage(UserName, content, roomName)
+        val jsonData = gson.toJson(sendData)
+        socket.emit("newMessage", jsonData)
+
         message.setText("")
-        addMessage(UserName, messageText)
-        val sendText = JSONObject()
-        try {
-            sendText.put("text", messageText)
-            socket.emit("new message", sendText)
-        } catch (e: JSONException) {
-            Toast.makeText(context, "Send", Toast.LENGTH_LONG).show()
-        }
+
+        val message = MessageTexts(UserName, content, roomName, MessageType.CHAT_MINE.index)
+        addMessage(message)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -135,175 +131,35 @@ class ChatFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
-    private val onNewMessage = Emitter.Listener { args ->
-        activity?.runOnUiThread(Runnable {
-            val data = args[0] as JSONObject
-            val username: String
-            val message: String
-            try {
-                username = data.getString("username")
-                message = data.getString("text")
-            } catch (e: JSONException) {
-                Toast.makeText(context, "onNewMessage", Toast.LENGTH_LONG).show()
-                return@Runnable
-            }
-
-            // add the message to view
-            addMessage(username, message)
-        })
-    }
-
-    private val onLogin = Emitter.Listener { args ->
-        val data = args[0] as JSONObject
-        val numUsers: Int
-        numUsers = try {
-            data.getInt("numUsers")
-        } catch (e: JSONException) {
-            return@Listener
-        }
-
-        showNumRoom(numUsers)
+    private val onNewMessage = Emitter.Listener {
+        val chat: MessageTexts = gson.fromJson(it[0].toString(), MessageTexts::class.java)
+        chat.viewType = MessageType.CHAT_PARTNER.index
+        addMessage(chat)
     }
 
 
-    @SuppressLint("UseRequireInsteadOfGet")
     private val onConnect = Emitter.Listener {
-        activity!!.runOnUiThread {
-            if (!isConnected) {
-                if (null != UserName) socket.emit("add user", UserName)
-                Toast.makeText(
-                    activity!!.applicationContext,
-                    "connect", Toast.LENGTH_LONG
-                ).show()
-                isConnected = true
-            }
-        }
+        val data = InitialData(UserName, roomName)
+        val jsonData = gson.toJson(data)
+        socket.emit("subscribe", jsonData)
+        Toast.makeText(context,"subscribe",Toast.LENGTH_LONG).show()
     }
 
-    @SuppressLint("UseRequireInsteadOfGet")
-    private val onDisconnect = Emitter.Listener {
-        activity!!.runOnUiThread {
-            Log.i(
-                "TAG",
-                "diconnected"
-            )
-            isConnected = false
-            Toast.makeText(
-                activity!!.applicationContext,
-                "disconnect", Toast.LENGTH_LONG
-            ).show()
-        }
+    private val onUserJoined = Emitter.Listener {
+        val name = it[0] as String //This pass the userName!
+        val chat = MessageTexts(name, "", roomName, MessageType.USER_JOIN.index)
+        addMessage(chat)
+        Toast.makeText(context,"on New User triggered",Toast.LENGTH_LONG).show()
     }
 
-    @SuppressLint("UseRequireInsteadOfGet")
-    private val onConnectError = Emitter.Listener {
-        activity!!.runOnUiThread {
-            Log.e(
-                "TAG",
-                "Error connecting"
-            )
-            Toast.makeText(activity!!.applicationContext,
-                "error_connect", Toast.LENGTH_LONG
-            ).show()
-        }
+    private val onUserLeft = Emitter.Listener {
+        val leftUserName = it[0] as String
+        val chat = MessageTexts(leftUserName, "", "", MessageType.USER_LEAVE.index)
+        addMessage(chat)
     }
 
-
-    @SuppressLint("UseRequireInsteadOfGet")
-    private val onUserJoined = Emitter.Listener { args ->
-        activity!!.runOnUiThread(Runnable {
-            val data = args[0] as JSONObject
-            val username: String
-            val numUsers: Int
-            try {
-                username = data.getString("username")
-                numUsers = data.getInt("numUsers")
-            } catch (e: JSONException) {
-                Log.e(
-                    "TAG",
-                    e.message!!
-                )
-                return@Runnable
-            }
-            //addLog(resources.getString(R.string.message_user_joined, username))
-            showNumRoom(numUsers)
-        })
-    }
-
-    private val onUserLeft = Emitter.Listener { args ->
-        requireActivity().runOnUiThread(Runnable {
-            val data = args[0] as JSONObject
-            val username: String
-            val numUsers: Int
-            try {
-                username = data.getString("username")
-                numUsers = data.getInt("numUsers")
-            } catch (e: JSONException) {
-                Log.e(
-                    "TAG",
-                    e.message!!
-                )
-                return@Runnable
-            }
-            // addLog(resources.getString(R.string.message_user_left, username))
-            showNumRoom(numUsers)
-            // removeTyping(username)
-        })
-    }
-
-    @SuppressLint("UseRequireInsteadOfGet")
-    private val onTyping = Emitter.Listener { args ->
-        activity!!.runOnUiThread(Runnable {
-            val data = args[0] as JSONObject
-            val username: String
-            username = try {
-                data.getString("username")
-            } catch (e: JSONException) {
-                Log.e(
-                    "TAG",
-                    e.message!!
-                )
-                return@Runnable
-            }
-            addTyping(username)
-        })
-    }
-
-    private fun addTyping(username: String) {
-
-    }
-
-    @SuppressLint("UseRequireInsteadOfGet")
-    private val onStopTyping = Emitter.Listener { args ->
-        activity!!.runOnUiThread(Runnable {
-            val data = args[0] as JSONObject
-            val username: String
-            username = try {
-                data.getString("username")
-            } catch (e: JSONException) {
-                Log.e(
-                    "TAG",
-                    e.message!!
-                )
-                return@Runnable
-            }
-            //removeTyping(username)
-        })
-    }
-
-    private val onTypingTimeout = Runnable {
-        if (!mTyping) return@Runnable
-        mTyping = false
-        socket.emit("stop typing")
-    }
-
-    private fun showNumRoom(numUsers: Int) {
-        userNum.text = numUsers.toString()+" User opened Now"
-    }
-
-
-    private fun addMessage(username: String, message: String) {
-        list.add(MessageTexts(username, message))
+    private fun addMessage(chat:MessageTexts) {
+        list.add(chat)
         messageitem.adapter=MessageAdapter(context, list, UserName)
     }
 
@@ -311,17 +167,10 @@ class ChatFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         socket.disconnect()
-        socket.off("new message", onNewMessage)
-        socket.off("login", onLogin)
         socket.off(Socket.EVENT_CONNECT, onConnect)
-        socket.off(Socket.EVENT_DISCONNECT, onDisconnect)
-        socket.off(Socket.EVENT_CONNECT_ERROR, onConnectError)
-        socket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError)
         socket.off("new message", onNewMessage)
         socket.off("user joined", onUserJoined)
         socket.off("user left", onUserLeft)
-        socket.off("typing", onTyping)
-        socket.off("stop typing", onStopTyping)
     }
 
 }
